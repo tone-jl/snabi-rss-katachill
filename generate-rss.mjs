@@ -31,7 +31,7 @@ async function fetchPage(page = 1) {
 function extractText(contentState) {
   try {
     const obj = JSON.parse(contentState);
-    return obj.blocks.map(b => b.text).filter(Boolean).join(' ').slice(0, 200).trim();
+    return obj.blocks.map(b => b.text).filter(Boolean).join(' ').slice(0, 400).trim();
   } catch { return ''; }
 }
 
