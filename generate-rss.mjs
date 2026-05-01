@@ -87,7 +87,8 @@ ${items}
 
 (async () => {
   const { articles } = await fetchPage(1);
-  const rss = buildRss(articles);
+  const limited = articles.slice(0, 5);
+  const rss = buildRss(limited);
   fs.writeFileSync(OUTPUT_FILE, rss, 'utf8');
-  console.log(`✅ ${articles.length}件取得完了 → ${OUTPUT_FILE}`);
+  console.log(`✅ ${limited.length}件取得完了 → ${OUTPUT_FILE}`);
 })();
