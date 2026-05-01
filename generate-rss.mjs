@@ -3,7 +3,7 @@ import { JSDOM } from 'jsdom';
 import fs from 'fs';
 
 const FACILITY_ID   = 37135;
-const FACILITY_NAME = 'かたちるベース';
+const FACILITY_NAME = '未来のかたち 四ツ橋校';
 const BASE_URL      = `https://snabi.jp/facility/${FACILITY_ID}/blog_articles`;
 const OUTPUT_FILE   = 'feed.xml';
 
@@ -35,13 +35,14 @@ function extractText(contentState) {
   } catch { return ''; }
 }
 
-function extractThumbnail(contentState) {
+function extractThumbnails(contentState) {
   try {
     const obj = JSON.parse(contentState);
     const images = Object.values(obj.entityMap || {})
-      .filter(e => e.type === 'IMAGE' && e.data?.src);
-    return images.length > 0 ? images[0].data.src : null;
-  } catch { return null; }
+      .filter(e => e.type === 'IMAGE' && e.data?.src)
+      .map(e => e.data.src);
+    return images.slice(0, 10);
+  } catch { return []; }
 }
 
 function escapeXml(str) {
@@ -58,16 +59,16 @@ function buildRss(articles) {
     const link      = `https://snabi.jp/facility/${a.facility_id}/blog_articles/${a.id}`;
     const pubDate   = new Date(a.formatted_open_at).toUTCString();
     const desc      = escapeXml(extractText(a.content_state));
-    const thumbnail = extractThumbnail(a.content_state);
-    const mediaTag  = thumbnail
-      ? `\n      <media:content url="${thumbnail}" medium="image"/>`
-      : '';
+    const thumbnails = extractThumbnails(a.content_state);
+    const mediaTags  = thumbnails
+      .map(url => `\n      <media:content url="${url}" medium="image"/>`)
+      .join('');
     return `    <item>
       <title>${escapeXml(a.title)}</title>
       <link>${link}</link>
       <guid isPermaLink="true">${link}</guid>
       <pubDate>${pubDate}</pubDate>
-      <description>${desc}…</description>${mediaTag}
+      <description>${desc}…</description>${mediaTags}
     </item>`;
   }).join('\n');
 
