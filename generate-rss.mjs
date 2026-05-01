@@ -3,7 +3,7 @@ import { JSDOM } from 'jsdom';
 import fs from 'fs';
 
 const FACILITY_ID   = 37135;
-const FACILITY_NAME = '未来のかたち 四ツ橋校';
+const FACILITY_NAME = 'かたちるベース';
 const BASE_URL      = `https://snabi.jp/facility/${FACILITY_ID}/blog_articles`;
 const OUTPUT_FILE   = 'feed.xml';
 
