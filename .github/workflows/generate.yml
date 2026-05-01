@@ -2,10 +2,9 @@ name: Generate RSS
 
 on:
   schedule:
-schedule:
     - cron: '0 3 * * *'
     - cron: '45 7 * * *'
-workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build:
