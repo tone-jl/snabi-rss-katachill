@@ -60,9 +60,10 @@ function buildRss(articles) {
     const pubDate   = new Date(a.formatted_open_at).toUTCString();
     const desc      = escapeXml(extractText(a.content_state));
     const thumbnails = extractThumbnails(a.content_state);
-    const mediaTags  = thumbnails
-      .map(url => `\n      <media:content url="${url}" medium="image"/>`)
-      .join('');
+    const combinedUrl = thumbnails.join(',');
+    const mediaTags = combinedUrl
+  ? `\n      <media:content url="${combinedUrl}" medium="image"/>`
+  : '';
     return `    <item>
       <title>${escapeXml(a.title)}</title>
       <link>${link}</link>
